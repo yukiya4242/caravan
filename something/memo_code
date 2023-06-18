@@ -1,0 +1,12 @@
+<ルートパス>
+root to: '[コントローラ名]#[アクション名]'
+例）
+root to: 'homes#top'
+
+<resources>
+resources :コントローラ名
+
+onlyも使える
+resources :コントローラ名, only:[:アクション名]
+
+*<resources>は<patch>や<update>なども自動に生成してくれる

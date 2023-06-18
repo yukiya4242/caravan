@@ -1,0 +1,93 @@
+public server => config/enviroments/development => config.hosts.clear
+
+<ターミナルコマンド>
+
+<scaffold>
+1. rails generate scaffold モデル名 カラム名1:データ型1 カラム名2:データ型2 ...
+2. rails db:migrate
+
+
+
+<Make Controller>
+命名規則：すべて小文字、複数形
+ビューの同時作成：rails g controller コントローラ名 アクション名1 アクション名2 ...
+
+rails g controller [コントローラ名（複数形)]
+
+
+
+
+<Make Model>
+命名規則：先頭は大文字
+migrationファイルも同時に作成される。
+migrationファイルのテーブル名はモデルの複数形
+
+rails g model [モデル名（単数形）]
+カラム同時作成：rails g model モデル名 カラム名1:データ型1 カラム名2:データ型2 ...
+
+
+<Migration file>
+追加や削除のためのMigrationファイルを作成するためのコマンド
+
+rails g migration Addカラム名Toテーブル名 カラム名:型名
+
+例）「lists」テーブルに文字列型の「name」というカラムを追加したい場合
+rails g migration AddNameToLists name:string
+
+
+カラムの削除コマンド
+例）追加した「name」カラムを削除したい場合は
+rails g migration RemoveNameFromLists name:string
+
+
+
+<ActiveStorage>画像投稿機能
+rails active_storage:install
+rails db:migrate
+
+モデルに追記
+class Model < ApplicationRecord
+  has_one_attached :image
+end
+
+Controllerのストロングパラメータに追記
+...permit(:image)
+
+
+
+
+<gem install method>
+[devise]
+1. Gemfileに[gem 'devise']を追加
+2. bundle install
+3. rails g devise:install
+4. rails g devise [モデル名]
+5. 必要に応じてマイグレーションファイルに[t.string :name]を追加
+6. rails db:migrate
+7. rails g devise:views
+8. controllerに追記
+[class ApplicationController < ActionController::Base
+  before_action :configure_permitted_parameters, if: :devise_controller?
+
+  protected
+
+  def configure_permitted_parameters
+    devise_parameter_sanitizer.permit(:sign_up, keys: [:name])
+  end
+end]
+
+
+
+
+[pry] irbの強化版
+1. Gemfileに[gem 'pry-rails']を追加
+2. bundle install
+
+
+[image_processing] 画像サイズの変更をrailsで行うgem
+1. # gem 'image_processing', '~> 1.2' をコメントアウト
+2. bundle install
+エラーが発生する場合があるので
+[config.active_job.queue_adapter = :inline]を
+config/environments/development.rb
+に追記
